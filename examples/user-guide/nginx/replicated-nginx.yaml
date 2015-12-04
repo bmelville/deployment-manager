@@ -1,0 +1,37 @@
+resources:
+- name: nginx-rc
+  type: ReplicationController
+  properties:
+    apiVersion: v1
+    kind: ReplicationController
+    metadata:
+      name: nginx-controller
+      spec:
+        replicas: 2
+        selector:
+          app: nginx
+        template:
+          metadata:
+            labels:
+              app: nginx
+          spec:
+            containers:
+            - name: nginx
+              image: nginx
+              ports:
+              - containerPort: 80
+- name: nginx-service
+  type: Service
+  properties:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginx-service
+      spec:
+        ports:
+        - port: 8000
+          targetPort: 80
+          protocol: TCP
+        selector:
+          app: nginx
+

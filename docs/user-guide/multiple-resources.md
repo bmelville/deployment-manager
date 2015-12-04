@@ -42,17 +42,17 @@ resources:
 - name: nginx-service
   type: Service
   properties:
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: nginx-service
-    spec:
-      ports:
-      - port: 8000
-        targetPort: 80
-        protocol: TCP
-    selector:
-      app: nginx
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginx-service
+      spec:
+        ports:
+        - port: 8000
+          targetPort: 80
+          protocol: TCP
+      selector:
+        app: nginx
 ```
 
 Just as before, we can save these two resources to the file

@@ -1,0 +1,134 @@
+resources:
+- name: frontend-service
+  type: Service
+  properties:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: frontend-service
+      name: frontend-service
+      namespace: default
+    spec:
+      ports:
+      - name: frontend
+        port: 80
+      selector:
+        app: frontend
+      type: LoadBalancer
+- name: frontend-rc
+  type: ReplicationController
+  properties:
+    apiVersion: v1
+    kind: ReplicationController
+    metadata:
+      labels:
+        app: frontend-rc
+      name: frontend-rc
+      namespace: default
+    spec:
+      replicas: 3
+      selector:
+        app: frontend
+      template:
+        metadata:
+          labels:
+            app: frontend
+        spec:
+          containers:
+          - env: []
+            image: gcr.io/google_containers/example-guestbook-php-redis:v3
+            name: frontend
+            ports:
+            - containerPort: 80
+              name: frontend
+- name: redis-master
+  type: Service
+  properties:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: redis-master
+      name: redis-master
+      namespace: default
+    spec:
+      ports:
+      - name: master
+        port: 6379
+        targetPort: 6379
+      selector:
+        app: redis-master
+- name: redis-master-rc
+  type: ReplicationController
+  properties:
+    apiVersion: v1
+    kind: ReplicationController
+    metadata:
+      labels:
+        app: redis-master-rc
+      name: redis-master-rc
+      namespace: default
+    spec:
+      replicas: 1
+      selector:
+        app: redis-master
+      template:
+        metadata:
+          labels:
+            app: redis-master
+        spec:
+          containers:
+          - env: []
+            image: redis
+            name: master
+            ports:
+            - containerPort: 6379
+              name: master
+- name: redis-slave
+  type: Service
+  properties:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: redis-slave
+      name: redis-slave
+      namespace: default
+    spec:
+      ports:
+      - name: worker
+        port: 6379
+      selector:
+        app: redis-slave
+- name: redis-slave-rc
+  type: ReplicationController
+  properties:
+    apiVersion: v1
+    kind: ReplicationController
+    metadata:
+      labels:
+        app: redis-slave-rc
+      name: redis-slave-rc
+      namespace: default
+    spec:
+      replicas: 2
+      selector:
+        app: redis-slave
+      template:
+        metadata:
+          labels:
+            app: redis-slave
+        spec:
+          containers:
+          - env:
+            - name: GET_HOSTS_FROM
+              value: env
+            - name: REDIS_MASTER_SERVICE_HOST
+              value: redis-master
+            image: kubernetes/redis-slave:v2
+            name: worker
+            ports:
+            - containerPort: 6379
+              name: worker
+
