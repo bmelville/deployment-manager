@@ -56,7 +56,9 @@ resources:
 ```
 
 Just as before, we can save these two resources to the file
-`replicated-nginx.yaml` and deploy using the command:
+`replicated-nginx.yaml` (or download it from
+[replicated-nginx.yaml](https://github.com/kubernetes/deployment-manager/blob/master/examples/user-guide/nginx/replicated-nginx.yaml))
+and deploy using the command:
 
 ```
 dm --name replicated-nginx deploy replicated-nginx.yaml

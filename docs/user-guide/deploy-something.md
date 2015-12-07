@@ -35,7 +35,9 @@ resources:
 As you can see, the properties of the `nginx` `Pod` is exactly what you would
 normally pass to `kubectl` when deploying from the command-line.
 
-Now, save that file into `nginx.yaml`, and deploy it using the `dm` client:
+Now, save that file into `nginx.yaml` or get it from
+[nginx.yaml](https://github.com/kubernetes/deployment-manager/blob/master/examples/user-guide/nginx/nginx.yaml),
+and deploy it using the `dm` client:
 
 ```
 dm --name nginx deploy nginx.yaml
